@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>로 또 대 박</title>
+    <style>
+        canvas {background-image: url('https://github.com/huwat/huwat.github.io/blob/main/background.png?raw=true')}
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="600" height="500"></canvas>
+    <script>
+        let nums = []
+        let sortedNums;
+        
+        function pickNum(){
+            nums = [];
+            while( nums.length < 7 ){
+                let num = Math.ceil(Math.random() * 45);
+                if(nums.indexOf(num) === -1){
+                    nums.push(num);
+                } else continue;
+            }
+            sortedNums = [...nums.slice(0,6).sort(function(a,b){return a-b}), nums[6]];
+        }
+        pickNum()
+        
+        var colors = ['red', 'blue', 'green', 'salmon', 'orange', 'yellow', 'purple']
+        var color
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var x = canvas.width / 2;
+        var y = canvas.height - 30;
+        var h = 0;
+        var dh = 2
+        var img = new Image();
+        img.src='https://github.com/huwat/huwat.github.io/blob/main/yong.png?raw=true'
+        
+        
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, -10, h, 600, 500); 
+            drawBalls()
+            
+            if ( h > 15 || h < -10){
+                dh *= -1
+            }
+            h = h+dh
+            
+            texts()
+            bonus()
+            maker()
+        }
+        
+        
+        function drawBall() {
+            color = colors[Math.floor(Math.random() * 7)];
+            ctx.beginPath();
+            ctx.arc(x-270, y - 50, 30, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(255, 255, 0, 0.5)";
+            ctx.fillStyle = color;
+            ctx.fill()
+            ctx.lineWidth = 10;
+            ctx.stroke();
+            ctx.closePath();
+        }
+        
+        function bonus(){
+            ctx.font="bold 15px black";
+            ctx.fillStyle='white'
+            ctx.fillText('보너스', 500, 470);
+        }
+        function maker(){
+            ctx.font="bold 15px black";
+            ctx.fillStyle='black'
+            ctx.fillText('G.way Lottery', 255, 492);
+        }
+        
+        function text(n) {
+            ctx.font="bold 30px black";
+            ctx.fillStyle='black'
+            ctx.fillText(n, x-285, y - 40);
+        }
+        
+        function texts() {
+            x = canvas.width / 2;
+            y = canvas.height - 30;
+            for(let i = 0; i < 7; i++){
+                x += 70
+                text(String(sortedNums[i]))
+            }
+        }
+        
+        function drawBalls(){
+            x = canvas.width / 2;
+            y = canvas.height - 30;
+            for(let i = 0; i < 7; i++){
+                x += 70
+                drawBall()
+            }
+        }
+        
+        setInterval(draw, 100)
+    </script>
+</body>
